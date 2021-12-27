@@ -17,7 +17,7 @@ typedef struct Node {
 } Node, *pnode;
 
 void BuildGraph(pnode *head, char** buffptr);
-void InsertNode(pnode *head, char* buff);
+void InsertNode(pnode *head, char** buffptr);
 void DeleteNode(pnode *head, char* buff);
 void PrintGraph(pnode *head); //for self debug
 void DeleteGraph(pnode* head);

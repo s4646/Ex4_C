@@ -24,6 +24,10 @@ int main()
                 c += 2;
             }
         }
+        if(*c=='B')
+        {
+            InsertNode(&list, &c);
+        }
 
     } while (*c!=EOF && *c!='\0' && *c!='\n');
     

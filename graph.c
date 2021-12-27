@@ -140,3 +140,75 @@ void BuildGraph(pnode *head, char** buffptr)
     }
     *buffptr = buff;
 }
+
+void InsertNode(pnode* head, char** buffptr)
+{
+    char* buff = *buffptr;
+
+    pnode *nptr = head;
+    // if node does not exist, go to end of the list
+    while(*nptr != NULL)
+    {
+        // if node already exist, remove its out edges
+        if((*nptr)->node_num==GetNum(buff+2))
+        {
+             pedge *etemp = &((*nptr) -> edges);
+             pedge eprev = NULL;
+
+            while(*etemp != NULL)
+            {
+                eprev = *etemp;
+                etemp = &((*etemp) -> next);
+                free(eprev);
+            }
+            break;
+        }
+        nptr = &((*nptr) ->next);
+    }
+    
+    // add node to the list
+    if(*nptr == NULL)
+    {
+        *nptr = (pnode)malloc(sizeof(Node));
+        buff+=2;
+        (*nptr)->node_num = GetNum(buff);
+        (*nptr)->next=NULL;
+    }
+    else
+    {
+        buff+=2;
+        (*nptr)->node_num = GetNum(buff);
+    }
+
+    // add edges to node
+    while(*(buff+2)!='A' && *(buff+2)!='B' && *(buff+2)!='D' && *(buff+2)!='S' && *(buff+2)!='T')
+    {   
+         pedge *eptr = &((*nptr) -> edges);
+        
+        while(*(buff+2)>='0' && *(buff+2)<='9' )
+        {
+            *eptr = (pedge)malloc(sizeof(Edge));
+            (*eptr) ->next = NULL;  
+            
+            // add edge's destination
+            buff += 2; // 2
+
+            (*eptr) -> endpoint = GetNode(head, GetNum(buff));
+            
+            // add edge's weight
+            buff += 2; // 5
+
+            (*eptr) -> weight = GetNum(buff);
+            eptr = &((*eptr) ->next);
+            
+            // if reached end of input
+            if(*(buff+1)=='\0' || *(buff+1)=='\n')
+            {
+                buff++;
+                *buffptr = buff;
+                return;
+            }
+        }
+    }
+    *buffptr = buff;
+}

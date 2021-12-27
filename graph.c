@@ -82,7 +82,7 @@ void BuildGraph(pnode *head, char** buffptr)
     DeleteGraph(head);
     
     // create nodes for the new graph
-    buff += 2; // 4
+    buff += 2;
     int counter = 0;
     // head = (pnode*)malloc(GetNum(buff)*sizeof(pnode));
     pnode *nptr = head;
@@ -106,11 +106,11 @@ void BuildGraph(pnode *head, char** buffptr)
             buff++;
             break;
         }
-        buff += 2; // n
+        buff += 2;
         // get node of given ID
         if(*buff=='n')
         {
-            buff += 2; // 0
+            buff += 2;
             nptr = head;
             while ((*nptr) -> node_num != GetNum(buff))
             {
@@ -127,12 +127,12 @@ void BuildGraph(pnode *head, char** buffptr)
             (*eptr) ->next = NULL;  
             
             // add edge's destination
-            buff += 2; // 2
+            buff += 2;
 
             (*eptr) -> endpoint = GetNode(head, GetNum(buff));
             
             // add edge's weight
-            buff += 2; // 5
+            buff += 2;
 
             (*eptr) -> weight = GetNum(buff);
             eptr = &((*eptr) ->next);
@@ -165,8 +165,9 @@ void InsertNode(pnode* head, char** buffptr)
         }
         nptr = &((*nptr) ->next);
     }
-    
+
     // add node to the list
+    // if at the end of the list, malloc a new node
     if(*nptr == NULL)
     {
         *nptr = (pnode)malloc(sizeof(Node));
@@ -174,6 +175,7 @@ void InsertNode(pnode* head, char** buffptr)
         (*nptr)->node_num = GetNum(buff);
         (*nptr)->next=NULL;
     }
+    // else, modify existing node
     else
     {
         buff+=2;
@@ -191,12 +193,12 @@ void InsertNode(pnode* head, char** buffptr)
             (*eptr) ->next = NULL;  
             
             // add edge's destination
-            buff += 2; // 2
+            buff += 2;
 
             (*eptr) -> endpoint = GetNode(head, GetNum(buff));
             
             // add edge's weight
-            buff += 2; // 5
+            buff += 2;
 
             (*eptr) -> weight = GetNum(buff);
             eptr = &((*eptr) ->next);

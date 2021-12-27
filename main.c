@@ -27,6 +27,10 @@ int main()
         if(*c=='B')
         {
             InsertNode(&list, &c);
+            if(*c !='\n' && *c!='\0')
+            {
+                c += 2;
+            }
         }
 
     } while (*c!=EOF && *c!='\0' && *c!='\n');

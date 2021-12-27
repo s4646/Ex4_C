@@ -190,7 +190,7 @@ void InsertNode(pnode* head, char** buffptr)
         while(*(buff+2)>='0' && *(buff+2)<='9' )
         {
             *eptr = (pedge)malloc(sizeof(Edge));
-            (*eptr) ->next = NULL;  
+            (*eptr) ->next = NULL;
             
             // add edge's destination
             buff += 2;

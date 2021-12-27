@@ -18,7 +18,7 @@ int GetNum(char* buff)
     int i = 0;
     while((*(buff+1)!=' ' && *(buff+1)!='\n') && i<6)
     {
-        num[i]=*buff;
+        num[i]=*(buff++);
         i++;
     }
     num[i]=*buff;
@@ -54,19 +54,19 @@ void DeleteGraph(pnode *head)
         return;
     
     pnode *ntemp = head;
-    pedge etemp;
-    pnode nprev;
-    pedge eprev;
+    pedge *etemp = NULL;
+    pnode nprev = NULL;
+    pedge eprev = NULL;
     // remove nodes
     while (*ntemp != NULL)
     {
         
-        etemp = (*ntemp) -> edges;
+        etemp = &((*ntemp) -> edges);
         // remove edges of node
-        while(etemp != NULL)
+        while(*etemp != NULL)
         {
-            eprev = etemp;
-            etemp = etemp -> next;
+            eprev = *etemp;
+            etemp = &((*etemp) -> next);
             free(eprev);
         }
         nprev = *ntemp;
@@ -98,7 +98,7 @@ void BuildGraph(pnode *head, char** buffptr)
     }
     
     // add edges to the graph
-    while(*(buff+2)!='B' || *(buff+2)!='D' || *(buff+2)!='S' || *(buff+2)!='T')
+    while(*(buff+2)!='A' && *(buff+2)!='B' && *(buff+2)!='D' && *(buff+2)!='S' && *(buff+2)!='T')
     {
         // if reached end of input
         if(*(buff+1)=='\0' || *(buff+1)=='\n')
@@ -121,9 +121,10 @@ void BuildGraph(pnode *head, char** buffptr)
         pedge *eptr = &((*nptr) -> edges);
 
         // add edges to node
-        while(*(buff+2)>='0' && *(buff+2)<='9')
+        while(*(buff+2)>='0' && *(buff+2)<='9' )
         {
-            *eptr = (pedge)malloc(sizeof(Edge));  
+            *eptr = (pedge)malloc(sizeof(Edge));
+            (*eptr) ->next = NULL;  
             
             // add edge's destination
             buff += 2; // 2

@@ -28,6 +28,7 @@ int main()
     } while (*c!=EOF && *c!='\0' && *c!='\n');
     
     PrintGraph(&list);
+    DeleteGraph(&list);
 
     return 0;
 }

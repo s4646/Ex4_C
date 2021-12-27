@@ -16,7 +16,7 @@ int GetNum(char* buff)
 {
     char num[6];
     int i = 0;
-    while(*(buff+1)!=' ' && i<6)
+    while((*(buff+1)!=' ' && *(buff+1)!='\n') && i<6)
     {
         num[i]=*buff;
         i++;

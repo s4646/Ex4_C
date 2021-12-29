@@ -24,7 +24,7 @@ int main()
                 c += 2;
             }
         }
-        if (*c == 'B')
+        else if (*c == 'B')
         {
             InsertNode(&list, &c);
             if (*c != '\n' && *c != '\0')
@@ -32,7 +32,7 @@ int main()
                 c += 2;
             }
         }
-        if(*c=='D')
+        else if(*c=='D')
         {
             DeleteNode(&list, &c);
             if(*c !='\n' && *c!='\0')
@@ -40,7 +40,7 @@ int main()
                 c += 2;
             }
         }
-        if (*c == 'S')
+        else if (*c == 'S')
         {
             char src = atoi((c + 1));
             char dest = atoi((c + 3));

@@ -39,6 +39,12 @@ void PrintEdges(pedge head)
 void PrintGraph(pnode *head)
 {
     pnode *temp = head;
+    if (*temp == NULL)
+    {
+        printf("Empty Graph\n");
+        return;
+    }
+    
     while ((*temp)->next != NULL)
     {
         printf("Node's ID: %d, next is %d\n", (*temp)->node_num, (*temp)->next->node_num);
@@ -283,9 +289,17 @@ void DeleteNode(pnode* head, char** buffptr)
     // if node is head, start list at the next node
     if((*head)->node_num == index)
     {
-        pnode temp = *nptr;
-        *head = (*head)->next;
-        free(temp);
+        if ((*head)->next==NULL)
+        {
+            free(*head);
+            *head = NULL;
+        }
+        else
+        {
+            pnode temp = *nptr;
+            *head = (*head)->next;
+            free(temp);
+        }
     }
     else
     {

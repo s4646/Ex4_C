@@ -6,6 +6,7 @@
 void PrintGraph(pnode *head);
 void BuildGraph(pnode *head, char **buffptr);
 void DeleteGraph(pnode *head);
+void DeleteNode(pnode* head, char** buffptr);
 
 int main()
 {
@@ -27,6 +28,14 @@ int main()
         {
             InsertNode(&list, &c);
             if (*c != '\n' && *c != '\0')
+            {
+                c += 2;
+            }
+        }
+        if(*c=='D')
+        {
+            DeleteNode(&list, &c);
+            if(*c !='\n' && *c!='\0')
             {
                 c += 2;
             }

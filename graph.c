@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "graph.h"
 
 Node *GetNode(pnode *head, int num)
@@ -213,6 +214,84 @@ void InsertNode(pnode *head, char **buffptr)
                 return;
             }
         }
+    }
+    *buffptr = buff;
+}
+
+void DeleteNode(pnode* head, char** buffptr)
+{
+    char* buff = *buffptr;
+    buff+=2;
+    pnode *nptr = head;
+    pedge *eptr = NULL;
+    pedge eprev = NULL;
+    int index = GetNum(buff);
+    
+    // remove relevant edges in each node
+    while (*nptr != NULL)
+    {
+        if((*nptr)->node_num==index)
+        {
+            eptr = &((*nptr) -> edges);       
+            while(*eptr!=NULL)
+            {
+                eprev = *eptr;
+                eptr = &((*eptr)->next);
+                free(eprev);
+            }
+            nptr = &((*nptr) -> next);
+            continue;
+        }
+        eptr = &((*nptr) -> edges);
+        // remove edges of node
+        while(*eptr != NULL)
+        {
+            // if relevant edge is head of the list
+            if((*eptr)->endpoint == ((*nptr)->edges)->endpoint && (*eptr)->endpoint->node_num == index)
+            {
+                eprev = *eptr;
+                (*nptr)->edges = (*nptr)->edges->next;
+                free(eprev);
+                continue;
+            }
+            // if relevant edge is found
+            if ((*eptr)->endpoint->node_num == index)
+            {
+                eprev->next = (*eptr)->next;
+                free(*eptr);
+                eptr = &(eprev->next);
+                continue;
+            }
+            eprev = *eptr;
+            eptr = &((*eptr)->next);
+        }
+        nptr = &((*nptr) -> next);
+    }
+
+    // remove node
+    nptr = head;
+    pnode prev = NULL;
+    while ((*nptr)!=NULL)
+    {
+        if ((*nptr)->node_num == index)
+        {
+            break;
+        }
+        prev = *nptr;
+        nptr = &((*nptr)->next);
+    }
+    // if node is head, start list at the next node
+    if((*head)->node_num == index)
+    {
+        pnode temp = *nptr;
+        *head = (*head)->next;
+        free(temp);
+    }
+    else
+    {
+        pnode temp = (*nptr)->next;
+        free(*nptr);
+        prev->next = temp;
     }
     *buffptr = buff;
 }

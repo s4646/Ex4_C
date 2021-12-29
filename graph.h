@@ -28,7 +28,7 @@ typedef struct L_Node
 
 void BuildGraph(pnode *head, char **buffptr);
 void InsertNode(pnode *head, char **buffptr);
-void DeleteNode(pnode *head, char *buff);
+void DeleteNode(pnode *head, char **buffptr);
 void PrintGraph(pnode *head); //for self debug
 void DeleteGraph(pnode *head);
 void ShortestPath(pnode head, int src, int dest);

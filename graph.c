@@ -264,6 +264,17 @@ node_list d_gethead(node_list list_head)
     }
 }
 
+pnode get_node(pnode list, int id)
+{
+    pnode temp = list;
+    while (temp->node_num != id)
+    {
+        temp = temp->next;
+    }
+
+    return temp;
+}
+
 void ShortestPath(pnode head, int src, int dest)
 {
 
@@ -279,8 +290,9 @@ void ShortestPath(pnode head, int src, int dest)
     }
 
     // create a list for the nodes
-    head->weight = 0;
-    l_node ln = {head, NULL};
+    pnode srcNode = get_node(head, src);
+    srcNode->weight = 0;
+    l_node ln = {srcNode, NULL};
     node_list list_head = &ln;
     node_list list_tail = list_head;
 
@@ -296,21 +308,22 @@ void ShortestPath(pnode head, int src, int dest)
             // get node to which we arrived
             pnode nextNode = temp_edge->endpoint;
 
+            // add node to queue
             if (nextNode->tag == 0)
             {
-                // add node to queue
                 d_add(list_tail, nextNode);
                 list_tail = list_tail->next;
+                nextNode->tag = 1;
+            }
 
-                // get edges weight
-                double weight = temp_edge->weight;
+            // get edges weight
+            double weight = temp_edge->weight;
 
-                // add weight to the node
-                double newWeight = currentNode->weight + weight;
-                if (newWeight < nextNode->weight)
-                {
-                    nextNode->weight = newWeight;
-                }
+            // add weight to the node
+            double newWeight = currentNode->weight + weight;
+            if (newWeight < nextNode->weight)
+            {
+                nextNode->weight = newWeight;
             }
 
             temp_edge = temp_edge->next;
@@ -320,5 +333,6 @@ void ShortestPath(pnode head, int src, int dest)
         // free(list_head);
         list_head = next_head;
     }
-    printf("Done!");
+    pnode destNode = get_node(head, dest);
+    printf("Shortest distance from %d to %d is: %.3f\n", src, dest, destNode->weight);
 }

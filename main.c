@@ -46,7 +46,7 @@ int main()
 
     } while (*c != EOF && *c != '\0' && *c != '\n');
 
-    ShortestPath(list->next->next, 1, 3);
+    ShortestPath(list, 2, 0);
     PrintGraph(&list);
     DeleteGraph(&list);
 

@@ -233,24 +233,6 @@ void d_add(node_list list_tail, pnode node)
     list_tail->next = newNode;
 }
 
-// a remove for djikstra
-void d_remove(pnode *list, int node_id)
-{
-    if (list != NULL)
-    {
-        pnode temp = *(list);
-
-        while (temp->next->node_num != node_id)
-        {
-            temp = temp->next;
-        }
-
-        pnode nextNode = temp->next->next;
-        free(temp->next);
-        temp->next = nextNode;
-    }
-}
-
 node_list d_gethead(node_list list_head)
 {
     if (list_head == NULL)

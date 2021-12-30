@@ -278,8 +278,9 @@ void DeleteNode(pnode* head, char** buffptr)
             // if relevant edge is found
             if ((*eptr)->endpoint->node_num == index)
             {
+                pedge temp = *eptr;
                 eprev->next = (*eptr)->next;
-                free(*eptr);
+                free(temp);
                 eptr = &(eprev->next);
                 continue;
             }

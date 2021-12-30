@@ -40,13 +40,13 @@ int main()
                 c += 2;
             }
         }
-        else if (*c == 'S')
-        {
-            char src = atoi((c + 1));
-            char dest = atoi((c + 3));
-            ShortestPath(list, src, dest);
-            c = c + 6;
-        }
+        // else if (*c == 'S')
+        // {
+        //     char src = atoi((c + 1));
+        //     char dest = atoi((c + 3));
+        //     ShortestPath(list, src, dest);
+        //     c = c + 6;
+        // }
         else
         {
             if (*(c + 1) == ' ')

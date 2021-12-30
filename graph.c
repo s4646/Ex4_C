@@ -208,22 +208,22 @@ void InsertNode(pnode *head, char **buffptr)
     }
 
     // add edges to node
-    while (*(buff + 2) != 'A' && *(buff + 2) != 'B' && *(buff + 2) != 'D' && *(buff + 2) != 'S' && *(buff + 2) != 'T')
+    while (*(buff+LenOfNum(GetNum(buff))+1) != 'A' && *(buff+LenOfNum(GetNum(buff))+1) != 'B' && *(buff+LenOfNum(GetNum(buff))+1) != 'D' && *(buff+LenOfNum(GetNum(buff))+1) != 'S' && *(buff+LenOfNum(GetNum(buff))+1) != 'T')
     {
         pedge *eptr = &((*nptr)->edges);
 
-        while (*(buff + 2) >= '0' && *(buff + 2) <= '9')
+        while (*(buff+LenOfNum(GetNum(buff))+1) >= '0' && *(buff+LenOfNum(GetNum(buff))+1) <= '9')
         {
             *eptr = (pedge)malloc(sizeof(Edge));
             (*eptr)->next = NULL;
 
             // add edge's destination
-            buff += 2;
+            buff += LenOfNum(GetNum(buff))+1;
 
             (*eptr)->endpoint = GetNode(head, GetNum(buff));
 
             // add edge's weight
-            buff += 2;
+            buff += LenOfNum(GetNum(buff))+1;
 
             (*eptr)->weight = GetNum(buff);
             eptr = &((*eptr)->next);

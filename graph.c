@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <string.h>
 #include "graph.h"
 
 Node *GetNode(pnode *head, int num)
@@ -28,14 +29,14 @@ int GetNum(char *buff)
 
 int LenOfNum(int num)
 {
-    if(num==0)
+    if (num == 0)
     {
         return 1;
     }
     int i = 0;
-    while (num>0)
+    while (num > 0)
     {
-        num=num/10;
+        num = num / 10;
         i++;
     }
     return i;
@@ -59,7 +60,7 @@ void PrintGraph(pnode *head)
         printf("Empty Graph\n");
         return;
     }
-    
+
     while ((*temp)->next != NULL)
     {
         printf("Node's ID: %d, next is %d\n", (*temp)->node_num, (*temp)->next->node_num);
@@ -122,7 +123,7 @@ void BuildGraph(pnode *head, char **buffptr)
     }
 
     // add edges to the graph
-    while (*(buff+LenOfNum(GetNum(buff))+1) != 'A' && *(buff+LenOfNum(GetNum(buff))+1) != 'B' && *(buff+LenOfNum(GetNum(buff))+1) != 'D' && *(buff+LenOfNum(GetNum(buff))+1) != 'S' && *(buff+LenOfNum(GetNum(buff))+1) != 'T')
+    while (*(buff + LenOfNum(GetNum(buff)) + 1) != 'A' && *(buff + LenOfNum(GetNum(buff)) + 1) != 'B' && *(buff + LenOfNum(GetNum(buff)) + 1) != 'D' && *(buff + LenOfNum(GetNum(buff)) + 1) != 'S' && *(buff + LenOfNum(GetNum(buff)) + 1) != 'T')
     {
         // if reached end of input
         if (*(buff + 1) == '\0' || *(buff + 1) == '\n')
@@ -130,7 +131,7 @@ void BuildGraph(pnode *head, char **buffptr)
             buff++;
             break;
         }
-        buff += LenOfNum(GetNum(buff))+1;
+        buff += LenOfNum(GetNum(buff)) + 1;
         // get node of given ID
         if (*buff == 'n')
         {
@@ -145,18 +146,18 @@ void BuildGraph(pnode *head, char **buffptr)
         pedge *eptr = &((*nptr)->edges);
 
         // add edges to node
-        while (*(buff+LenOfNum(GetNum(buff))+1) >= '0' && *(buff+LenOfNum(GetNum(buff))+1) <= '9')
+        while (*(buff + LenOfNum(GetNum(buff)) + 1) >= '0' && *(buff + LenOfNum(GetNum(buff)) + 1) <= '9')
         {
             *eptr = (pedge)malloc(sizeof(Edge));
             (*eptr)->next = NULL;
 
             // add edge's destination
-            buff += LenOfNum(GetNum(buff))+1;
+            buff += LenOfNum(GetNum(buff)) + 1;
 
             (*eptr)->endpoint = GetNode(head, GetNum(buff));
 
             // add edge's weight
-            buff += LenOfNum(GetNum(buff))+1;
+            buff += LenOfNum(GetNum(buff)) + 1;
 
             (*eptr)->weight = GetNum(buff);
             eptr = &((*eptr)->next);
@@ -239,36 +240,36 @@ void InsertNode(pnode *head, char **buffptr)
     *buffptr = buff;
 }
 
-void DeleteNode(pnode* head, char** buffptr)
+void DeleteNode(pnode *head, char **buffptr)
 {
-    char* buff = *buffptr;
-    buff+=2;
+    char *buff = *buffptr;
+    buff += 2;
     pnode *nptr = head;
     pedge *eptr = NULL;
     pedge eprev = NULL;
     int index = GetNum(buff);
-    
+
     // remove relevant edges in each node
     while (*nptr != NULL)
     {
-        if((*nptr)->node_num==index)
+        if ((*nptr)->node_num == index)
         {
-            eptr = &((*nptr) -> edges);       
-            while(*eptr!=NULL)
+            eptr = &((*nptr)->edges);
+            while (*eptr != NULL)
             {
                 eprev = *eptr;
                 eptr = &((*eptr)->next);
                 free(eprev);
             }
-            nptr = &((*nptr) -> next);
+            nptr = &((*nptr)->next);
             continue;
         }
-        eptr = &((*nptr) -> edges);
+        eptr = &((*nptr)->edges);
         // remove edges of node
-        while(*eptr != NULL)
+        while (*eptr != NULL)
         {
             // if relevant edge is head of the list
-            if((*eptr)->endpoint == ((*nptr)->edges)->endpoint && (*eptr)->endpoint->node_num == index)
+            if ((*eptr)->endpoint == ((*nptr)->edges)->endpoint && (*eptr)->endpoint->node_num == index)
             {
                 eprev = *eptr;
                 (*nptr)->edges = (*nptr)->edges->next;
@@ -287,13 +288,13 @@ void DeleteNode(pnode* head, char** buffptr)
             eprev = *eptr;
             eptr = &((*eptr)->next);
         }
-        nptr = &((*nptr) -> next);
+        nptr = &((*nptr)->next);
     }
 
     // remove node
     nptr = head;
     pnode prev = NULL;
-    while ((*nptr)!=NULL)
+    while ((*nptr) != NULL)
     {
         if ((*nptr)->node_num == index)
         {
@@ -303,9 +304,9 @@ void DeleteNode(pnode* head, char** buffptr)
         nptr = &((*nptr)->next);
     }
     // if node is head, start list at the next node
-    if((*head)->node_num == index)
+    if ((*head)->node_num == index)
     {
-        if ((*head)->next==NULL)
+        if ((*head)->next == NULL)
         {
             free(*head);
             *head = NULL;
@@ -358,7 +359,7 @@ node_list d_gethead(node_list list_head)
 pnode get_node(pnode list, int id)
 {
     pnode temp = list;
-    while (temp->node_num != id)
+    while (temp != NULL && temp->node_num != id)
     {
         temp = temp->next;
     }
@@ -366,11 +367,8 @@ pnode get_node(pnode list, int id)
     return temp;
 }
 
-void ShortestPath(pnode head, int src, int dest)
+double ShortestPath(pnode head, int src, int dest)
 {
-
-    /*need to make so that we put src as head then i will be done*/
-
     // init weights and tags
     pnode temp = head;
     while (temp != NULL)
@@ -383,8 +381,10 @@ void ShortestPath(pnode head, int src, int dest)
     // create a list for the nodes
     pnode srcNode = get_node(head, src);
     srcNode->weight = 0;
-    l_node ln = {srcNode, NULL};
-    node_list list_head = &ln;
+
+    node_list list_head = (node_list)malloc(sizeof(l_node));
+    list_head->next = NULL;
+    list_head->value = srcNode;
     node_list list_tail = list_head;
 
     // main loop
@@ -421,9 +421,54 @@ void ShortestPath(pnode head, int src, int dest)
         }
 
         node_list next_head = list_head->next;
-        // free(list_head);
+        free(list_head); // not sure this is perfect
         list_head = next_head;
     }
     pnode destNode = get_node(head, dest);
-    printf("Shortest distance from %d to %d is: %.3f\n", src, dest, destNode->weight);
+    return destNode->weight;
+}
+
+pnode helperGraph(pnode list, int *cities, int size)
+{
+    pnode graph = NULL;
+    int size_of_node = size * 4;
+    char *buffer;
+    char *temp = {'\0'};
+    int i, j;
+
+    // allocate memory for the list of node representations
+    buffer = (char *)malloc(4 + size * (size_of_node) + 2);
+    memset(buffer, 0, sizeof(buffer));
+    temp = (char *)malloc(5);
+    sprintf(temp, "A %d ", size);
+    strcat(buffer, temp);
+
+    // add more info to the text
+    for (i = 0; i < size; ++i)
+    {
+        // get node by the index
+        pnode node = get_node(list, cities[i]);
+        sprintf(temp, "n %d ", node->node_num);
+        strcat(buffer, temp);
+
+        // go over all other nodes
+        for (j = 0; j < size; ++j)
+        {
+            if (i != j)
+            {
+                // add edges to the graph
+                int dist = (int)ShortestPath(list, i, j);
+                sprintf(temp, "%d %d ", j, dist);
+                strcat(buffer, temp);
+            }
+        }
+    }
+
+    puts(buffer);
+    BuildGraph(&graph, &buffer);
+    printf("---------------------------------------------------------------\n");
+    printf("---------------------------------------------------------------\n");
+    printf("---------------------------------------------------------------\n");
+    PrintGraph(&graph);
+    return graph;
 }

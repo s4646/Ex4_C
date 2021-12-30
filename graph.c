@@ -185,6 +185,7 @@ void InsertNode(pnode *head, char **buffptr)
                 etemp = &((*etemp)->next);
                 free(eprev);
             }
+            (*nptr)->edges=NULL;
             break;
         }
         nptr = &((*nptr)->next);
@@ -209,6 +210,10 @@ void InsertNode(pnode *head, char **buffptr)
     // add edges to node
     while (*(buff+LenOfNum(GetNum(buff))+1) != 'A' && *(buff+LenOfNum(GetNum(buff))+1) != 'B' && *(buff+LenOfNum(GetNum(buff))+1) != 'D' && *(buff+LenOfNum(GetNum(buff))+1) != 'S' && *(buff+LenOfNum(GetNum(buff))+1) != 'T')
     {
+        if(*(buff+LenOfNum(GetNum(buff))+1) == '\n' || *(buff+LenOfNum(GetNum(buff))+1) == '\0')
+        {
+            break;
+        }
         pedge *eptr = &((*nptr)->edges);
 
         while (*(buff+LenOfNum(GetNum(buff))+1) >= '0' && *(buff+LenOfNum(GetNum(buff))+1) <= '9')
@@ -228,7 +233,7 @@ void InsertNode(pnode *head, char **buffptr)
             eptr = &((*eptr)->next);
 
             // if reached end of input
-            if (*(buff + 1) == '\0' || *(buff + 1) == '\n')
+            if (*(buff+LenOfNum(GetNum(buff))) == '\0' || *(buff+LenOfNum(GetNum(buff))) == '\n')
             {
                 buff++;
                 *buffptr = buff;

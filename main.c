@@ -45,7 +45,7 @@ int main()
             char src = atoi((c + 1));
             char dest = atoi((c + 3));
             ShortestPath(list, src, dest);
-            c = c + 2;
+            c = c + 6;
         }
         else
         {

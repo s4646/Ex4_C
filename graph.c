@@ -15,7 +15,7 @@ Node *GetNode(pnode *head, int num)
 
 int GetNum(char *buff)
 {
-    char num[6];
+    char num[6] = {'\0'};
     int i = 0;
     while ((*(buff + 1) != ' ' && *(buff + 1) != '\n') && i < 6)
     {
@@ -24,6 +24,21 @@ int GetNum(char *buff)
     }
     num[i] = *buff;
     return atoi(num);
+}
+
+int LenOfNum(int num)
+{
+    if(num==0)
+    {
+        return 1;
+    }
+    int i = 0;
+    while (num>0)
+    {
+        num=num/10;
+        i++;
+    }
+    return i;
 }
 
 void PrintEdges(pedge head)
@@ -107,7 +122,7 @@ void BuildGraph(pnode *head, char **buffptr)
     }
 
     // add edges to the graph
-    while (*(buff + 2) != 'A' && *(buff + 2) != 'B' && *(buff + 2) != 'D' && *(buff + 2) != 'S' && *(buff + 2) != 'T')
+    while (*(buff+LenOfNum(GetNum(buff))+1) != 'A' && *(buff+LenOfNum(GetNum(buff))+1) != 'B' && *(buff+LenOfNum(GetNum(buff))+1) != 'D' && *(buff+LenOfNum(GetNum(buff))+1) != 'S' && *(buff+LenOfNum(GetNum(buff))+1) != 'T')
     {
         // if reached end of input
         if (*(buff + 1) == '\0' || *(buff + 1) == '\n')
@@ -115,7 +130,7 @@ void BuildGraph(pnode *head, char **buffptr)
             buff++;
             break;
         }
-        buff += 2;
+        buff += LenOfNum(GetNum(buff))+1;
         // get node of given ID
         if (*buff == 'n')
         {
@@ -130,18 +145,18 @@ void BuildGraph(pnode *head, char **buffptr)
         pedge *eptr = &((*nptr)->edges);
 
         // add edges to node
-        while (*(buff + 2) >= '0' && *(buff + 2) <= '9')
+        while (*(buff+LenOfNum(GetNum(buff))+1) >= '0' && *(buff+LenOfNum(GetNum(buff))+1) <= '9')
         {
             *eptr = (pedge)malloc(sizeof(Edge));
             (*eptr)->next = NULL;
 
             // add edge's destination
-            buff += 2;
+            buff += LenOfNum(GetNum(buff))+1;
 
             (*eptr)->endpoint = GetNode(head, GetNum(buff));
 
             // add edge's weight
-            buff += 2;
+            buff += LenOfNum(GetNum(buff))+1;
 
             (*eptr)->weight = GetNum(buff);
             eptr = &((*eptr)->next);

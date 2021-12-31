@@ -443,7 +443,7 @@ pnode helperGraph(pnode list, int *cities, int size)
 
     // allocate memory for the list of node representations
     buffer = (char *)malloc(4 + size * (size_of_node) + 2);
-    memset(buffer, 0, sizeof(buffer));
+    // memset(buffer, 0, sizeof(buffer));
     temp = (char *)malloc(5);
     sprintf(temp, "A %d ", size);
     strcat(buffer, temp);

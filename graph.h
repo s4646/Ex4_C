@@ -31,7 +31,8 @@ void InsertNode(pnode *head, char **buffptr);
 void DeleteNode(pnode *head, char **buffptr);
 void PrintGraph(pnode *head); //for self debug
 void DeleteGraph(pnode *head);
-void ShortestPath(pnode head, int src, int dest);
+double ShortestPath(pnode head, int src, int dest);
 void TSP(pnode source, pnode destination);
+pnode helperGraph(pnode list, int *cities, int size);
 
 #endif

@@ -3,15 +3,16 @@
 #include <limits.h>
 #include "graph.h"
 
-void PrintGraph(pnode *head);
-void BuildGraph(pnode *head, char **buffptr);
-void DeleteGraph(pnode *head);
-void DeleteNode(pnode* head, char** buffptr);
+// void PrintGraph(pnode *head);
+// void BuildGraph(pnode *head, char **buffptr);
+// void DeleteGraph(pnode *head);
+// void DeleteNode(pnode *head, char **buffptr);
 
 int main()
 {
-    char buff[1000] = {'\0'};
-    fgets(buff, 1000, stdin);
+    // char buff[1000] = {'\0'};
+    // fgets(buff, 1000, stdin);
+    char *buff = "A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 n 3 T 3 2 1 3 S 2 0";
     char *c = buff;
     Node *list = NULL;
     do
@@ -32,21 +33,22 @@ int main()
                 c += 2;
             }
         }
-        else if(*c=='D')
+        else if (*c == 'D')
         {
             DeleteNode(&list, &c);
-            if(*c !='\n' && *c!='\0')
+            if (*c != '\n' && *c != '\0')
             {
                 c += 2;
             }
         }
-        // else if (*c == 'S')
-        // {
-        //     char src = atoi((c + 1));
-        //     char dest = atoi((c + 3));
-        //     ShortestPath(list, src, dest);
-        //     c = c + 6;
-        // }
+        else if (*c == 'S')
+        {
+            char src = atoi((c + 1));
+            char dest = atoi((c + 3));
+            double dist = ShortestPath(list, src, dest);
+            printf("dist from %d to %d is: %.3f\n", src, dest, dist);
+            c = c + 6;
+        }
         else
         {
             if (*(c + 1) == ' ')
@@ -61,7 +63,8 @@ int main()
 
     } while (*c != EOF && *c != '\0' && *c != '\n');
 
-    // ShortestPath(list, 2, 0);
+    int cities[] = {0, 1, 3};
+    helperGraph(list, cities, 3);
     PrintGraph(&list);
     DeleteGraph(&list);
 

@@ -113,6 +113,7 @@ void BuildGraph(pnode *head, char **buffptr)
     while (counter < GetNum(buff))
     {
         (*nptr) = (pnode)malloc(sizeof(Node));
+        if((*nptr)==NULL) {printf("malloc failed."); exit(0);}
         (*nptr)->node_num = counter;
         (*nptr)->edges = NULL;
         (*nptr)->next = NULL;
@@ -149,6 +150,7 @@ void BuildGraph(pnode *head, char **buffptr)
         while (*(buff + LenOfNum(GetNum(buff)) + 1) >= '0' && *(buff + LenOfNum(GetNum(buff)) + 1) <= '9')
         {
             *eptr = (pedge)malloc(sizeof(Edge));
+            if((*eptr)==NULL) {printf("malloc failed."); exit(0);}
             (*eptr)->next = NULL;
 
             // add edge's destination
@@ -197,6 +199,7 @@ void InsertNode(pnode *head, char **buffptr)
     if (*nptr == NULL)
     {
         *nptr = (pnode)malloc(sizeof(Node));
+        if((*nptr)==NULL) {printf("malloc failed."); exit(0);}
         buff += 2;
         (*nptr)->node_num = GetNum(buff);
         (*nptr)->next = NULL;
@@ -220,6 +223,7 @@ void InsertNode(pnode *head, char **buffptr)
         while (*(buff+LenOfNum(GetNum(buff))+1) >= '0' && *(buff+LenOfNum(GetNum(buff))+1) <= '9')
         {
             *eptr = (pedge)malloc(sizeof(Edge));
+            if((*eptr)==NULL) {printf("malloc failed."); exit(0);}
             (*eptr)->next = NULL;
 
             // add edge's destination
@@ -336,6 +340,7 @@ void DeleteNode(pnode *head, char **buffptr)
 void d_add(node_list list_tail, pnode node)
 {
     l_node *newNode = (l_node *)malloc(sizeof(l_node));
+    if(newNode==NULL) {printf("malloc failed."); exit(0);}
 
     if (newNode == NULL)
     {
@@ -388,6 +393,7 @@ double ShortestPath(pnode head, int src, int dest)
     srcNode->weight = 0;
 
     node_list list_head = (node_list)malloc(sizeof(l_node));
+    if(list_head==NULL) {printf("malloc failed."); exit(0);}
     list_head->next = NULL;
     list_head->value = srcNode;
     node_list list_tail = list_head;
@@ -443,8 +449,10 @@ pnode helperGraph(pnode list, int *cities, int size)
 
     // allocate memory for the list of node representations
     buffer = (char *)malloc(4 + size * (size_of_node) + 2);
+    if((buffer)==NULL) {printf("malloc failed."); exit(0);}
     // memset(buffer, 0, sizeof(buffer));
     temp = (char *)malloc(5);
+    if((temp)==NULL) {printf("malloc failed."); exit(0);}
     sprintf(temp, "A %d ", size);
     strcat(buffer, temp);
 

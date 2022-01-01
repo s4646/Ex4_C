@@ -456,7 +456,9 @@ double ShortestPath(pnode head, int src, int dest)
 		}
 
 		node_list next_head = list_head->next;
-		free(list_head); // not sure this is perfect
+		list_head->value = NULL;
+		list_head->next = NULL;
+		free(list_head);
 		list_head = next_head;
 	}
 	pnode destNode = get_node(head, dest);
@@ -485,6 +487,7 @@ pnode helperGraph(pnode list, int cities[], int size)
 		printf("malloc failed.");
 		exit(0);
 	}
+
 	sprintf(temp, "A %d ", size);
 	strcat(buffer, temp);
 
@@ -512,7 +515,8 @@ pnode helperGraph(pnode list, int cities[], int size)
 		}
 	}
 
-	BuildGraph(&graph, &buffer);
+	char *buffer_pt = buffer;
+	BuildGraph(&graph, &buffer_pt);
 
 	// change the node id to the original node id
 	pnode graph_pt = graph;
@@ -523,6 +527,9 @@ pnode helperGraph(pnode list, int cities[], int size)
 		graph_pt = graph_pt->next;
 		k++;
 	}
+
+	free(temp);
+	free(buffer);
 
 	return graph;
 }
@@ -637,6 +644,7 @@ int TSP(pnode head, int *cities, int size)
 		return -1;
 	}
 
+	DeleteGraph(&graph);
 	return total_weight;
 }
 

@@ -57,6 +57,7 @@ int main()
 			int *parameters = handle_tsp_input(c, size);
 			int tsp_result = TSP(list, parameters, size);
 			printf("TSP: %d\n", tsp_result);
+			free(parameters);
 			c += 2;
 		}
 		else

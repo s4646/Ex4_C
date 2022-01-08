@@ -76,24 +76,24 @@ void DeleteGraph(pnode *head)
 	if (*head == NULL)
 		return;
 
-	pnode *ntemp = head;
-	pedge *etemp = NULL;
+	pnode ntemp = *head;
+	pedge etemp = NULL;
 	pnode nprev = NULL;
 	pedge eprev = NULL;
 	// remove nodes
-	while (*ntemp != NULL)
+	while (ntemp != NULL)
 	{
 
-		etemp = &((*ntemp)->edges);
+		etemp = ntemp->edges;
 		// remove edges of node
-		while (*etemp != NULL)
+		while (etemp != NULL)
 		{
-			eprev = *etemp;
-			etemp = &((*etemp)->next);
+			eprev = etemp;
+			etemp = etemp->next;
 			free(eprev);
 		}
-		nprev = *ntemp;
-		ntemp = &((*ntemp)->next);
+		nprev = ntemp;
+		ntemp = ntemp->next;
 		free(nprev);
 	}
 }
@@ -187,13 +187,13 @@ void InsertNode(pnode *head, char **buffptr)
 		// if node already exist, remove its out edges
 		if ((*nptr)->node_num == GetNum(buff + 2))
 		{
-			pedge *etemp = &((*nptr)->edges);
+			pedge etemp = (*nptr)->edges;
 			pedge eprev = NULL;
 
-			while (*etemp != NULL)
+			while (etemp != NULL)
 			{
-				eprev = *etemp;
-				etemp = &((*etemp)->next);
+				eprev = etemp;
+				etemp = etemp->next;
 				free(eprev);
 			}
 			(*nptr)->edges = NULL;
@@ -269,64 +269,65 @@ void DeleteNode(pnode *head, char **buffptr)
 {
 	char *buff = *buffptr;
 	buff += 2;
-	pnode *nptr = head;
-	pedge *eptr = NULL;
+	pnode nptr = *head;
+	pedge eptr = NULL;
 	pedge eprev = NULL;
 	int index = GetNum(buff);
 
 	// remove relevant edges in each node
-	while (*nptr != NULL)
+	while (nptr != NULL)
 	{
-		if ((*nptr)->node_num == index)
+		if (nptr->node_num == index)
 		{
-			eptr = &((*nptr)->edges);
-			while (*eptr != NULL)
+			eptr = nptr->edges;
+			while (eptr != NULL)
 			{
-				eprev = *eptr;
-				eptr = &((*eptr)->next);
+				eprev = eptr;
+				eptr = eptr->next;
 				free(eprev);
 			}
-			nptr = &((*nptr)->next);
+			nptr = nptr->next;
 			continue;
 		}
-		eptr = &((*nptr)->edges);
+		eptr = nptr->edges;
 		// remove edges of node
-		while (*eptr != NULL)
+		while (eptr != NULL)
 		{
 			// if relevant edge is head of the list
-			if ((*eptr)->endpoint == ((*nptr)->edges)->endpoint && (*eptr)->endpoint->node_num == index)
+			if (eptr->endpoint == (nptr->edges)->endpoint && (eptr->endpoint)->node_num == index)
 			{
-				eprev = *eptr;
-				(*nptr)->edges = (*nptr)->edges->next;
+				eprev = eptr;
+				nptr->edges = nptr->edges->next;
 				free(eprev);
+				eptr = nptr->edges;
 				continue;
 			}
 			// if relevant edge is found
-			if ((*eptr)->endpoint->node_num == index)
+			if (eptr->endpoint->node_num == index)
 			{
-				pedge temp = *eptr;
-				eprev->next = (*eptr)->next;
+				pedge temp = eptr;
+				eprev->next = eptr->next;
+				eptr = eprev->next;
 				free(temp);
-				eptr = &(eprev->next);
 				continue;
 			}
-			eprev = *eptr;
-			eptr = &((*eptr)->next);
+			eprev = eptr;
+			eptr = eptr->next;
 		}
-		nptr = &((*nptr)->next);
+		nptr = nptr->next;
 	}
 
 	// remove node
-	nptr = head;
+	nptr = *head;
 	pnode prev = NULL;
-	while ((*nptr) != NULL)
+	while (nptr != NULL)
 	{
-		if ((*nptr)->node_num == index)
+		if (nptr->node_num == index)
 		{
 			break;
 		}
-		prev = *nptr;
-		nptr = &((*nptr)->next);
+		prev = nptr;
+		nptr = nptr->next;
 	}
 	// if node is head, start list at the next node
 	if ((*head)->node_num == index)
@@ -338,17 +339,18 @@ void DeleteNode(pnode *head, char **buffptr)
 		}
 		else
 		{
-			pnode temp = *nptr;
+			pnode temp = nptr;
 			*head = (*head)->next;
 			free(temp);
 		}
 	}
 	else
 	{
-		pnode temp = (*nptr)->next;
-		free(*nptr);
+		pnode temp = nptr->next;
+		free(nptr);
 		prev->next = temp;
 	}
+	buff += LenOfNum(index)-1;
 	*buffptr = buff;
 }
 

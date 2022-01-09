@@ -10,8 +10,8 @@
 
 int main()
 {
-	char buff[1000] = {'\0'};
-	fgets(buff, 1000, stdin);
+	static char buff[10000000] = {'\0'};
+	fgets(buff, 10000000, stdin);
 	// char *buff = "A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 n 3 T 3 2 1 3 S 2 0";
 	char *c = buff;
 	Node *list = NULL;

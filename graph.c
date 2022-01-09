@@ -464,14 +464,14 @@ pnode helperGraph(pnode list, int size, int cities[size])
 	char *temp = NULL;
 	int k = 0;
 
-	buffer = (char*)calloc(sizeof(char), 1000);
+	buffer = (char*)calloc(sizeof(char), 10000000);
 	if ((buffer) == NULL)
 	{
 		printf("malloc failed.");
 		exit(0);
 	}
 
-	temp = (char *)calloc(sizeof(char), 1000);
+	temp = (char *)calloc(sizeof(char), 5);
 	if ((temp) == NULL)
 	{
 		printf("malloc failed.");

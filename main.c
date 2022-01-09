@@ -3,11 +3,6 @@
 #include <limits.h>
 #include "graph.h"
 
-// void PrintGraph(pnode *head);
-// void BuildGraph(pnode *head, char **buffptr);
-// void DeleteGraph(pnode *head);
-// void DeleteNode(pnode *head, char **buffptr);
-
 int main()
 {
 	static char buff[10000000] = {'\0'};

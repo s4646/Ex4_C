@@ -46,21 +46,15 @@ int main()
 			char src = atoi((c + 1));
 			char dest = atoi((c + 3));
 			double dist = ShortestPath(list, src, dest);
-			printf("dist from %d to %d is: %.3f\n", src, dest, dist);
+			printf("Dijsktra shortest path: %.0f \n", dist);
 			c += 2;
 			c = c + LenOfNum(GetNum(buff))+1;
 			c = c + LenOfNum(GetNum(buff))+1;
 		}
 		else if (*c == 'T')
 		{
-			c += 2;
-			int size = GetNum(c);
-			c += LenOfNum(size) + 1;
-			int *parameters = handle_tsp_input(c, size);
-			int tsp_result = TSP(list, size, parameters);
-			printf("TSP: %d\n", tsp_result);
-			// free(parameters);
-			c += 2;
+			int tsp_result = TSP(list, &c);
+			printf("TSP shortest path: %d \n", tsp_result);
 		}
 		else
 		{
@@ -76,7 +70,7 @@ int main()
 
 	} while (*c != EOF && *c != '\0' && *c != '\n');
 
-	PrintGraph(&list);
+	// PrintGraph(&list);
 	DeleteGraph(&list);
 
 	return 0;

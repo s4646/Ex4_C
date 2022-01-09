@@ -32,7 +32,7 @@ void DeleteNode(pnode *head, char **buffptr);
 void PrintGraph(pnode *head); // for self debug
 void DeleteGraph(pnode *head);
 double ShortestPath(pnode head, int src, int dest);
-int TSP(pnode head, int size, int cities[size]);
+int TSP(pnode head, char **buffptr);
 pnode helperGraph(pnode list, int size, int cities[size]);
 int *handle_tsp_input(char *input, int size);
 int GetNum(char *buff);

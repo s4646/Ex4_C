@@ -16,7 +16,7 @@ Node *GetNode(pnode *head, int num)
 
 int GetNum(char *buff)
 {
-	char num[6] = {'\0'};
+	char num[10] = {'\0'};
 	int i = 0;
 	while ((*(buff + 1) != ' ' && *(buff + 1) != '\n') && i < 6)
 	{
@@ -456,74 +456,6 @@ double ShortestPath(pnode head, int src, int dest)
 	return destNode->weight;
 }
 
-pnode helperGraph(pnode list, int size, int cities[size])
-{
-	pnode graph = NULL;
-	
-	char *buffer = NULL;
-	char *temp = NULL;
-	int k = 0;
-
-	buffer = (char*)calloc(sizeof(char), 10000000);
-	if ((buffer) == NULL)
-	{
-		printf("malloc failed.");
-		exit(0);
-	}
-
-	temp = (char *)calloc(sizeof(char), 5);
-	if ((temp) == NULL)
-	{
-		printf("malloc failed.");
-		exit(0);
-	}
-
-	sprintf(temp, "A %d ", size);
-	strcat(buffer, temp);
-
-	// add more info to the text
-	for (int i = 0; i < size; ++i)
-	{
-		// get node by the index
-		sprintf(temp, "n %d ", i);
-		strcat(buffer, temp);
-
-		// go over all other nodes
-		for (int j = 0; j < size; ++j)
-		{
-			if (i != j)
-			{
-				// add edges to the graph
-				int dist = (int)ShortestPath(list, cities[i], cities[j]);
-
-				if (dist > 0)
-				{
-					sprintf(temp, "%d %d ", j, dist);
-					strcat(buffer, temp);
-				}
-			}
-		}
-	}
-
-	char *buffer_pt = buffer;
-	BuildGraph(&graph, &buffer_pt);
-
-	// change the node id to the original node id
-	pnode graph_pt = graph;
-
-	while (graph_pt != NULL)
-	{
-		graph_pt->node_num = cities[k];
-		graph_pt = graph_pt->next;
-		k++;
-	}
-
-	free(temp);
-	free(buffer);
-
-	return graph;
-}
-
 void reset_tags(pnode head)
 {
 	pnode ptr = head;
@@ -604,54 +536,83 @@ int check_path(pnode head)
 	return 1;
 }
 
-int TSP(pnode head, int size, int cities[size])
-{
-	// get distance using a greedy method on the modified graph
-	pnode graph = NULL;
-	graph = helperGraph(head, size, cities);
 
-	// create pointer to run on the graph nodes
-	pnode node_ptr = graph;
-
-	// min path weight]
-	int total_weight = INT_MAX;
-
-	// go over all nodes and get path weight
-	while (node_ptr != NULL)
-	{
-		reset_tags(graph);
-		int weight = get_path_weight(node_ptr);
-
-		if (weight < total_weight && check_path(graph) == 1)
-		{
-			total_weight = weight;
-		}
-
-		node_ptr = node_ptr->next;
-	}
-
-	if (total_weight == INT_MAX)
-	{
-		return -1;
-	}
-
-	DeleteGraph(&graph);
-	return total_weight;
+void swap(int *x, int *y) 
+{ 
+    int temp = *x; 
+    *x = *y; 
+    *y = temp;
 }
 
-int *handle_tsp_input(char *input, int size)
+int FindTSP(pnode head, int size, int cities[size])
 {
-	int i, j;
-	char *buffer = input;
-	int result[size];
-
-	// add the numbers to the result memory
-	for (i = 0; i < size; ++i)
+	int sum = 0;
+	int temp = 0;
+	for (int i = 0; i < size - 1; i++)
 	{
-		result[i] = GetNum(buffer);
-		j = LenOfNum(result[i]) + 1;
-		buffer += j;
+		temp = ShortestPath(head, *(cities+i), *(cities+i+1));
+		if (temp==INT_MAX || temp == INT_MIN)
+			return INT_MAX;
+		else
+			sum += temp;
 	}
-	int* res = result;
-	return res;
+	return sum;
+}
+
+void permute(pnode head, int size, int cities[size], int* min, int l, int r) 
+{	 
+	if (l == r) 
+		return;
+	else
+	{ 
+		for (int i = l; i <= r; i++) 
+		{ 
+			swap(cities+l, cities+i);
+			// for (int i = 0; i < size; i++)
+			// {
+			// 	arr[i] = cities[i];
+			// }
+			int temp = FindTSP(head, size, cities);
+			*min = temp < *min ? temp : *min;
+			
+			permute(head, size, cities, min, l+1, r); 
+			
+			swap(cities+l, cities+i);
+			// for (int i = 0; i < size; i++)
+			// {
+			// 	arr[i] = cities[i];
+			// }
+			temp = FindTSP(head, size, cities);
+			*min = temp < *min ? temp : *min;
+		}
+	}
+}
+
+int TSP(pnode head, char **buffptr)
+{
+	char* buff = *buffptr;
+	buff += 2;
+	int min = INT_MAX;
+	int size = GetNum(buff);
+	int arr[size], i=0;
+	buff += LenOfNum(size) + 1;
+	while (*(buff + LenOfNum(GetNum(buff)) + 1) != 'A' && *(buff + LenOfNum(GetNum(buff)) + 1) != 'B' && *(buff + LenOfNum(GetNum(buff)) + 1) != 'D' && *(buff + LenOfNum(GetNum(buff)) + 1) != 'S' && *(buff + LenOfNum(GetNum(buff)) + 1) != 'T')
+	{
+		if (*(buff + LenOfNum(GetNum(buff)) + 1) == '\n' || *(buff + LenOfNum(GetNum(buff)) + 1) == '\0')
+		{
+			break;
+		}
+		arr[i] = atoi(buff);
+		buff += LenOfNum(arr[i++]) + 1;
+	}
+	arr[i] = atoi(buff);
+	buff += LenOfNum(arr[i++]) + 1;
+	
+	permute(head, size, arr, &min, 0, size-1);
+
+	if (min == INT_MAX || min == INT_MIN)
+		min = -1;
+
+	*buffptr = buff;
+	return min;
 }

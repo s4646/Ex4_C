@@ -388,17 +388,6 @@ node_list d_gethead(node_list list_head)
 	}
 }
 
-pnode get_node(pnode list, int id)
-{
-	pnode temp = list;
-	while (temp != NULL && temp->node_num != id)
-	{
-		temp = temp->next;
-	}
-
-	return temp;
-}
-
 double ShortestPath(pnode head, int src, int dest)
 {
 	// init weights and tags
@@ -411,7 +400,7 @@ double ShortestPath(pnode head, int src, int dest)
 	}
 
 	// create a list for the nodes
-	pnode srcNode = get_node(head, src);
+	pnode srcNode = GetNode(&head, src);
 	srcNode->weight = 0;
 
 	node_list list_head = (node_list)malloc(sizeof(l_node));
@@ -463,27 +452,26 @@ double ShortestPath(pnode head, int src, int dest)
 		free(list_head);
 		list_head = next_head;
 	}
-	pnode destNode = get_node(head, dest);
+	pnode destNode = GetNode(&head, dest);
 	return destNode->weight;
 }
 
-pnode helperGraph(pnode list, int cities[], int size)
+pnode helperGraph(pnode list, int size, int cities[size])
 {
 	pnode graph = NULL;
-	int size_of_node = size * 4;
-	char *buffer;
-	char *temp = {'\0'};
-	int i, j, k = 0;
+	
+	char *buffer = NULL;
+	char *temp = NULL;
+	int k = 0;
 
-	// allocate memory for the list of node representations
-	buffer = (char *)calloc(sizeof(char), 4 + size * (size_of_node) + 2);
+	buffer = (char*)calloc(sizeof(char), 1000);
 	if ((buffer) == NULL)
 	{
 		printf("malloc failed.");
 		exit(0);
 	}
 
-	temp = (char *)calloc(sizeof(char), 5);
+	temp = (char *)calloc(sizeof(char), 1000);
 	if ((temp) == NULL)
 	{
 		printf("malloc failed.");
@@ -494,14 +482,14 @@ pnode helperGraph(pnode list, int cities[], int size)
 	strcat(buffer, temp);
 
 	// add more info to the text
-	for (i = 0; i < size; ++i)
+	for (int i = 0; i < size; ++i)
 	{
 		// get node by the index
 		sprintf(temp, "n %d ", i);
 		strcat(buffer, temp);
 
 		// go over all other nodes
-		for (j = 0; j < size; ++j)
+		for (int j = 0; j < size; ++j)
 		{
 			if (i != j)
 			{
@@ -616,10 +604,11 @@ int check_path(pnode head)
 	return 1;
 }
 
-int TSP(pnode head, int *cities, int size)
+int TSP(pnode head, int size, int cities[size])
 {
 	// get distance using a greedy method on the modified graph
-	pnode graph = helperGraph(head, cities, size);
+	pnode graph = NULL;
+	graph = helperGraph(head, size, cities);
 
 	// create pointer to run on the graph nodes
 	pnode node_ptr = graph;
@@ -654,10 +643,7 @@ int *handle_tsp_input(char *input, int size)
 {
 	int i, j;
 	char *buffer = input;
-	int *result;
-
-	// allocate memory for the list of numbers
-	result = (int *)malloc(size);
+	int result[size];
 
 	// add the numbers to the result memory
 	for (i = 0; i < size; ++i)
@@ -666,6 +652,6 @@ int *handle_tsp_input(char *input, int size)
 		j = LenOfNum(result[i]) + 1;
 		buffer += j;
 	}
-
-	return result;
+	int* res = result;
+	return res;
 }

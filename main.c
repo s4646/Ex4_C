@@ -41,27 +41,27 @@ int main()
 				c += 2;
 			}
 		}
-		// else if (*c == 'S')
-		// {
-		// 	char src = atoi((c + 1));
-		// 	char dest = atoi((c + 3));
-		// 	double dist = ShortestPath(list, src, dest);
-		// 	printf("dist from %d to %d is: %.3f\n", src, dest, dist);
-		// 	c += 2;
-		// 	c = c + LenOfNum(GetNum(buff))+1;
-		// 	c = c + LenOfNum(GetNum(buff))+1;
-		// }
-		// else if (*c == 'T')
-		// {
-		// 	c += 2;
-		// 	int size = GetNum(c);
-		// 	c += LenOfNum(size) + 1;
-		// 	int *parameters = handle_tsp_input(c, size);
-		// 	int tsp_result = TSP(list, parameters, size);
-		// 	printf("TSP: %d\n", tsp_result);
-		// 	free(parameters);
-		// 	c += 2;
-		// }
+		else if (*c == 'S')
+		{
+			char src = atoi((c + 1));
+			char dest = atoi((c + 3));
+			double dist = ShortestPath(list, src, dest);
+			printf("dist from %d to %d is: %.3f\n", src, dest, dist);
+			c += 2;
+			c = c + LenOfNum(GetNum(buff))+1;
+			c = c + LenOfNum(GetNum(buff))+1;
+		}
+		else if (*c == 'T')
+		{
+			c += 2;
+			int size = GetNum(c);
+			c += LenOfNum(size) + 1;
+			int *parameters = handle_tsp_input(c, size);
+			int tsp_result = TSP(list, size, parameters);
+			printf("TSP: %d\n", tsp_result);
+			// free(parameters);
+			c += 2;
+		}
 		else
 		{
 			if (*(c + 1) == ' ')
